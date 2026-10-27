@@ -1,0 +1,12 @@
+{
+  "latestVersion": "1.0.1",
+  "versionCode": 2,
+  "apkUrl": "https://github.com/YoussefAhmad/rafeeq-android-updates/releases/latest/download/Rafeeq.apk",
+  "updateUrl": "https://github.com/YoussefAhmad/rafeeq-android-updates/releases/latest",
+  "releaseDate": "2026-10-27",
+  "releaseNotes": [
+    "تحسين سرعة الواجهة وسلاسة الاستخدام",
+    "إصلاحات وتحسينات للاستقرار",
+    "تطوير نظام التحديثات داخل التطبيق"
+  ]
+}
