@@ -1,83 +1,15 @@
-name: Notify Rafeeq Android users about a new release
-
-on:
-  push:
-    branches:
-      - main
-    paths:
-      - version.json
-  workflow_dispatch:
-    inputs:
-      send_notification:
-        description: 'Send a real notification to all Rafeeq subscribers'
-        required: true
-        type: boolean
-        default: false
-
-permissions:
-  contents: read
-
-concurrency:
-  group: rafeeq-android-release-notification
-  cancel-in-progress: false
-
-jobs:
-  notify-devices:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - name: Check out the update manifest
-        uses: actions/checkout@v7
-        with:
-          fetch-depth: 1
-
-      - name: Read Firebase project ID
-        id: project
-        shell: bash
-        env:
-          FIREBASE_SERVICE_ACCOUNT_JSON: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
-        run: |
-          node <<'NODE' >> "$GITHUB_OUTPUT"
-          const raw = process.env.FIREBASE_SERVICE_ACCOUNT_JSON || '';
-          if (!raw) throw new Error('Missing repository secret FIREBASE_SERVICE_ACCOUNT_JSON');
-          const account = JSON.parse(raw);
-          if (!account.project_id) throw new Error('Missing project_id in service-account JSON');
-          if (!account.client_email || !account.private_key) {
-            throw new Error('Service-account JSON is incomplete');
-          }
-          console.log(`project_id=${account.project_id}`);
-          NODE
-
-      - name: Authenticate with Firebase
-        id: auth
-        uses: google-github-actions/auth@v3
-        with:
-          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_JSON }}
-          token_format: access_token
-          access_token_lifetime: 300s
-          access_token_scopes: https://www.googleapis.com/auth/firebase.messaging
-
-      - name: Validate version.json and prepare notification
-        id: manifest
-        shell: bash
-        env:
-          FIREBASE_PROJECT_ID: ${{ steps.project.outputs.project_id }}
         run: |
           node <<'NODE'
           const fs = require('fs');
           const manifest = JSON.parse(fs.readFileSync('version.json', 'utf8'));
-
           const version = String(
             manifest.latestVersion ?? manifest.latest_version ??
             manifest.version ?? manifest.appVersion ?? ''
           ).trim().replace(/^[vV]/, '');
-
           const apkUrl = String(
             manifest.apkUrl ?? manifest.directApkUrl ??
             manifest.downloadUrl ?? ''
           ).trim();
-
           const updateUrl = String(
             manifest.updateUrl ?? manifest.releasePageUrl ??
             manifest.releaseUrl ?? ''
@@ -98,19 +30,15 @@ jobs:
 
           let notes = manifest.releaseNotes ??
             manifest.whatsNew ?? manifest.features ?? [];
-
           if (typeof notes === 'string') notes = notes.split(/\r?\n/);
           if (!Array.isArray(notes)) notes = [];
-
           notes = notes.map(x => String(x ?? '').trim())
             .filter(Boolean).slice(0, 5).map(x => x.slice(0, 180));
 
           const releaseDate = String(
-            manifest.releaseDate ??
-            manifest.release_date ??
+            manifest.releaseDate ?? manifest.release_date ??
             new Date().toISOString().slice(0, 10)
           );
-
           const title = 'تحديث جديد لتطبيق رفيق';
           const summary = notes.slice(0, 2).join(' • ');
           const body = (
@@ -132,7 +60,6 @@ jobs:
             notification_body: body,
             notification_id: `rafeeq-release-${version}`
           };
-
           const payload = {
             message: {
               topic: 'rafeeq_updates',
@@ -147,7 +74,6 @@ jobs:
               }
             }
           };
-
           fs.writeFileSync('fcm-payload.json', JSON.stringify(payload));
           fs.appendFileSync(process.env.GITHUB_OUTPUT, `version=${version}\n`);
           console.log(`Prepared notification for version ${version}`);
@@ -157,22 +83,18 @@ jobs:
         shell: bash
         run: |
           APK_URL="$(node -e "const m=require('./version.json'); process.stdout.write(String(m.apkUrl||m.directApkUrl||m.downloadUrl||''))")"
-
           if [ -z "$APK_URL" ]; then
             echo "apkUrl is missing"
             exit 1
           fi
-
           STATUS="$(curl --location --silent --show-error \
             --retry 3 --retry-all-errors --retry-delay 3 \
             --output /dev/null --write-out '%{http_code}' "$APK_URL")"
-
           if [ "$STATUS" != "200" ]; then
             echo "APK URL returned HTTP $STATUS"
             echo "Upload the APK before updating version.json."
             exit 1
           fi
-
           echo "APK URL is reachable."
 
       - name: Safe manual run - no notification
@@ -195,7 +117,5 @@ jobs:
             --header "Authorization: Bearer ${FIREBASE_ACCESS_TOKEN}" \
             --header 'Content-Type: application/json; charset=UTF-8' \
             --data-binary @fcm-payload.json)"
-
           node -e "const r=JSON.parse(process.argv[1]); if(!r.name) { console.error(JSON.stringify(r)); process.exit(1); } console.log('Firebase accepted the notification.');" "$RESPONSE"
-
           echo "Firebase accepted the notification for ${RELEASE_VERSION}."
