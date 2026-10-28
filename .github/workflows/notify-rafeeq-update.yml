@@ -1,5 +1,4 @@
 name: Notify Rafeeq Android users about a new release 
-
 on:
   push:
     branches:
