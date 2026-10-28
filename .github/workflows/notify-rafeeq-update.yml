@@ -1,4 +1,4 @@
-name: Notify Rafeeq Android users about a new release
+name: Notify Rafeeq Android users about a new release 
 
 on:
   push:
