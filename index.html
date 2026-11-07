@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>إِيَاد المُسلم — رفيقك الإيماني اليومي الذكي</title>
+  <meta name="description" content="تطبيق إسلامي متكامل وبدون إعلانات؛ يجمع المصحف الشريف، السنة النبوية، مواقيت الصلاة، إذاعة القرآن الكريم، والرقائق بتصميم زجاجي عصري وسرعة فائقة.">
+  <meta name="theme-color" content="#080d1a">
+  
+  <!-- خطوط عربية حديثة -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Tajawal:wght@400;500;700;900&family=Amiri+Quran&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #080d1a;
+      --card-bg: rgba(23, 31, 53, 0.65);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --card-hover: rgba(255, 255, 255, 0.16);
+      --accent-teal: #0d9488;
+      --accent-glow: #14b8a6;
+      --accent-blue: #3b82f6;
+      --accent-gold: #fbbf24;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --radius-xl: 32px;
+      --radius-lg: 24px;
+      --radius-md: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Tajawal', system-ui, sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      overflow-x: hidden;
+      line-height: 1.7;
+      background-image: 
+        radial-gradient(circle at 15% 10%, rgba(13, 148, 136, 0.18), transparent 45%),
+        radial-gradient(circle at 85% 25%, rgba(59, 130, 246, 0.14), transparent 40%),
+        radial-gradient(circle at 50% 75%, rgba(139, 92, 246, 0.1), transparent 50%);
+      background-attachment: fixed;
+    }
+
+    /* Container */
+    .container {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* Glass Effect */
+    .glass {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px) saturate(160%);
+      -webkit-backdrop-filter: blur(20px) saturate(160%);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    /* Navbar */
+    .nav-header {
+      position: sticky;
+      top: 16px;
+      z-index: 100;
+      margin: 16px auto 0;
+      max-width: 1100px;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-radius: 999px;
+    }
+
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text-main);
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent-teal), #2563eb);
+      display: grid;
+      place-items: center;
+      box-shadow: 0 4px 14px rgba(13, 148, 136, 0.4);
+    }
+
+    .brand-logo svg {
+      width: 24px;
+      height: 24px;
+      stroke: #fff;
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .brand-name {
+      font-size: 1.25rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    /* Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 22px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      border: 1px solid transparent;
+    }
+
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0d9488, #2563eb);
+      color: #fff;
+      box-shadow: 0 6px 20px rgba(13, 148, 136, 0.35);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 8px 26px rgba(13, 148, 136, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--text-main);
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 70px 0 50px;
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: rgba(13, 148, 136, 0.15);
+      border: 1px solid rgba(45, 212, 191, 0.3);
+      border-radius: 999px;
+      color: #5eead4;
+      font-size: 0.82rem;
+      font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 {
+      font-family: 'Cairo', sans-serif;
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 900;
+      line-height: 1.25;
+      margin-bottom: 20px;
+      letter-spacing: -0.03em;
+    }
+
+    .hero h1 span {
+      background: linear-gradient(120deg, #5eead4, #60a5fa, #c084fc);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    .hero p {
+      font-size: 1.12rem;
+      color: var(--text-muted);
+      line-height: 1.9;
+      margin-bottom: 32px;
+      max-width: 580px;
+    }
+
+    .hero-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 35px;
+    }
+
+    .hero-features-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .strip-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .strip-item svg {
+      color: #34d399;
+      width: 17px;
+      height: 17px;
+      stroke-width: 2.2;
+    }
+
+    /* Mockup phone */
+    .mockup-wrap {
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+
+    .mockup-wrap::before {
+      content: "";
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(13, 148, 136, 0.35), transparent 70%);
+      filter: blur(50px);
+      z-index: 0;
+    }
+
+    .phone-frame {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 330px;
+      background: #020611;
+      border: 8px solid rgba(255, 255, 255, 0.15);
+      border-radius: 46px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 0 10px rgba(0,0,0,0.8);
+      overflow: hidden;
+      padding: 16px 14px;
+    }
+
+    .phone-screen-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .mockup-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 10px;
+    }
+
+    .mockup-quran-box {
+      background: linear-gradient(135deg, rgba(13, 148, 136, 0.2), rgba(59, 130, 246, 0.15));
+      border: 1px solid rgba(45, 212, 191, 0.3);
+      border-radius: 20px;
+      padding: 18px 14px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .mockup-verse {
+      font-family: 'Amiri Quran', serif;
+      font-size: 1.15rem;
+      line-height: 2;
+      color: #fff;
+    }
+
+    /* Features Grid */
+    .section-title-wrap {
+      text-align: center;
+      max-width: 650px;
+      margin: 60px auto 40px;
+    }
+
+    .section-tag {
+      color: #5eead4;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .section-heading {
+      font-family: 'Cairo', sans-serif;
+      font-size: 2.2rem;
+      font-weight: 900;
+      margin: 6px 0 14px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 22px;
+      margin-bottom: 80px;
+    }
+
+    .feature-card {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(45, 212, 191, 0.35);
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+    }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(13, 148, 136, 0.25), rgba(59, 130, 246, 0.15));
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      display: grid;
+      place-items: center;
+      color: #5eead4;
+    }
+
+    .feature-icon svg {
+      width: 26px;
+      height: 26px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.9;
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      font-family: 'Cairo', sans-serif;
+    }
+
+    .feature-desc {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      line-height: 1.8;
+    }
+
+    .feature-tag {
+      align-self: flex-start;
+      margin-top: auto;
+      font-size: 0.75rem;
+      font-weight: 800;
+      color: #5eead4;
+      background: rgba(13, 148, 136, 0.12);
+      border: 1px solid rgba(45, 212, 191, 0.2);
+      padding: 4px 10px;
+      border-radius: 999px;
+    }
+
+    /* Live Interactive Demo Section */
+    .interactive-section {
+      margin: 60px 0 80px;
+      padding: 40px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(145deg, rgba(23, 31, 53, 0.8), rgba(15, 23, 42, 0.9));
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: center;
+    }
+
+    .interactive-info h3 {
+      font-family: 'Cairo', sans-serif;
+      font-size: 1.9rem;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    .interactive-box {
+      background: rgba(2, 6, 23, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: var(--radius-lg);
+      padding: 30px;
+      text-align: center;
+    }
+
+    .demo-counter-btn {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      margin: 18px auto;
+      background: linear-gradient(135deg, #0d9488, #2563eb);
+      color: white;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 10px 28px rgba(13, 148, 136, 0.4);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+      user-select: none;
+    }
+
+    .demo-counter-btn:active {
+      transform: scale(0.92);
+      box-shadow: 0 4px 15px rgba(13, 148, 136, 0.6);
+    }
+
+    .demo-count-num {
+      font-size: 2.8rem;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    /* CTA Section */
+    .cta-banner {
+      padding: 60px 30px;
+      text-align: center;
+      border-radius: var(--radius-xl);
+      background: radial-gradient(circle at 50% 0%, rgba(13, 148, 136, 0.35), transparent 70%),
+                  linear-gradient(160deg, #101c36, #090e1c);
+      border: 1px solid rgba(45, 212, 191, 0.3);
+      margin-bottom: 80px;
+    }
+
+    .cta-banner h2 {
+      font-family: 'Cairo', sans-serif;
+      font-size: 2.3rem;
+      font-weight: 900;
+      margin-bottom: 14px;
+    }
+
+    .cta-banner p {
+      color: var(--text-muted);
+      font-size: 1.05rem;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 40px 0;
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+
+    .footer-links a {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-weight: 700;
+      transition: color 0.2s ease;
+    }
+
+    .footer-links a:hover {
+      color: #5eead4;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero {
+        grid-template-columns: 1fr;
+        text-align: center;
+        padding-top: 40px;
+      }
+      .hero p {
+        margin-inline: auto;
+      }
+      .hero-btns {
+        justify-content: center;
+      }
+      .hero-features-strip {
+        justify-content: center;
+      }
+      .interactive-section {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- شريط التنقل العلوي -->
+  <header class="container">
+    <nav class="nav-header glass">
+      <a href="#" class="brand-wrap">
+        <div class="brand-logo">
+          <!-- أيقونة المصحف الشريف -->
+          <svg viewBox="0 0 24 24"><path d="M3 5.5A3.5 3.5 0 0 1 6.5 2H20v17H6.5A3.5 3.5 0 0 0 3 22zM3 5.5V22M7 6h9M7 10h9"/></svg>
+        </div>
+        <span class="brand-name">إِيَاد المُسلم</span>
+      </a>
+
+      <div class="nav-actions">
+        <!-- غيّر هذا الرابط لمسار تطبيق الويب أو ملف الـ html الرئيسي -->
+        <a href="./eyad-almuslim-calm-heritage.html" class="btn btn-primary" target="_blank">
+          <span>افتح التطبيق</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- القسم الرئيسي (Hero) -->
+  <main class="container">
+    <section class="hero">
+      <div class="hero-content">
+        <div class="hero-badge">
+          <span>✦ رفيقك الإيماني الشامل — بدون إعلانات نهائياً</span>
+        </div>
+        <h1>تجربة إيمانية هادئة، <span>ذكية، وعصرية</span></h1>
+        <p>
+          تطبيق إسلامي فائق السرعة يعمل بالكامل على هاتفك دون إنترنت. يجمع بين المصحف الشريف بالتجويد، وموسوعة السنة النبوية، ومواقيت الصلاة الدقيقة، وإذاعة القرآن الكريم مع نظام إنجاز يومي متطور.
+        </p>
+
+        <div class="hero-btns">
+          <a href="./eyad-almuslim-calm-heritage.html" class="btn btn-primary btn-large" target="_blank">
+            <span>تشغيل كـ Web App الآن</span>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3"/></svg>
+          </a>
+          <!-- رابط مستودع GitHub أو صفحة التنزيلات -->
+          <a href="https://github.com" class="btn btn-secondary" target="_blank">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            <span>كود المشروع على GitHub</span>
+          </a>
+        </div>
+
+        <div class="hero-features-strip">
+          <div class="strip-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 6-6"/></svg>
+            <span>يعمل بدون اتصال بالإنترنت</span>
+          </div>
+          <div class="strip-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 6-6"/></svg>
+            <span>حفظ البيانات محلياً 100%</span>
+          </div>
+          <div class="strip-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 6-6"/></svg>
+            <span>خفيف وسلس جداً</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- محاكاة الهاتف الزجاجي -->
+      <div class="mockup-wrap">
+        <div class="phone-frame glass">
+          <div class="phone-screen-header">
+            <div style="font-weight:900;font-size:0.85rem;color:#5eead4;">إِيَاد المُسلم</div>
+            <div style="font-size:0.75rem;color:var(--text-muted);">1448 هـ</div>
+          </div>
+          
+          <div class="mockup-card">
+            <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-bottom:6px;">
+              <span>الصلاة القادمة</span>
+              <span style="color:#fbbf24;font-weight:bold;">المغرب</span>
+            </div>
+            <div style="font-size:1.4rem;font-weight:900;color:#fff;">05:48 م</div>
+            <div style="font-size:0.7rem;color:#5eead4;margin-top:2px;">متبقي: 42 دقيقة</div>
+          </div>
+
+          <div class="mockup-quran-box">
+            <div style="font-size:0.7rem;color:#5eead4;margin-bottom:4px;font-weight:bold;">ورد اليوم المقترح</div>
+            <div class="mockup-verse">﴿ أَلَا بِذِكْرِ اللَّهِ تَطْمَئِنُّ الْقُلُوبُ ﴾</div>
+            <div style="font-size:0.68rem;color:var(--text-muted);margin-top:6px;">سورة الرعد · صفحة 253</div>
+          </div>
+
+          <div class="mockup-card" style="display:flex;align-items:center;justify-content:space-between;">
+            <div>
+              <div style="font-size:0.8rem;font-weight:bold;">خطة اليوم المتبقية</div>
+              <div style="font-size:0.68rem;color:var(--text-muted);">3 خطوات لإتمام هدفك</div>
+            </div>
+            <div style="font-size:1.1rem;color:#34d399;font-weight:900;">75%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- المزايا التفصيلية -->
+    <section>
+      <div class="section-title-wrap">
+        <span class="section-tag">كل ما تحتاجه في مكان واحد</span>
+        <h2 class="section-heading">مزايا صُممت بعناية لترافق يومك</h2>
+        <p style="color:var(--text-muted);">تم بناء كل ميزة داخل إِيَاد المُسلم لتعمل بسلاسة وخفة، مع مراعاة أدق التفاصيل في العزو الشرعي والراحة البصرية.</p>
+      </div>
+
+      <div class="features-grid">
+        <!-- 1 -->
+        <div class="glass feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 5.5A3.5 3.5 0 0 1 6.5 2H20v17H6.5A3.5 3.5 0 0 0 3 22zM3 5.5V22M7 6h9M7 10h9"/></svg>
+          </div>
+          <h3 class="feature-title">المصحف الشريف وخطة الختم</h3>
+          <p class="feature-desc">تصفح المصحف كاملاً بالرسم العثماني مع علامات التجويد الملونة وحفظ الموضع والتدوينات. خطة ختم مرنة تمتد من 7 إلى 90 يوماً مع الحفظ التلقائي أوفلاين.</p>
+          <span class="feature-tag">يعمل دون اتصال</span>
+        </div>
+
+        <!-- 2 -->
+        <div class="glass feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2.2 5-4.8 2 2-4.8z"/></svg>
+          </div>
+          <h3 class="feature-title">مكتبة السنة النبوية الشاملة</h3>
+          <p class="feature-desc">أكثر من 9 كتب كاملة (الصحيحين، السنن الأربعة، موطأ مالك، النووية، القدسية) مع توضيح درجات الروايات (صحيح، حسن، ضعيف) وإمكانية حفظها أوفلاين.</p>
+          <span class="feature-tag">بحث سريع وفوري</span>
+        </div>
+
+        <!-- 3 -->
+        <div class="glass feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M7 7 18 3M11 12h5v5h-5z"/></svg>
+          </div>
+          <h3 class="feature-title">إذاعة القاهرة والبث المرئي</h3>
+          <p class="feature-desc">استمع لبث إذاعة القرآن الكريم من القاهرة عبر مشغل مصغر يستمر في الخلفية، مع إمكانية مشاهدة البث الحي المباشر لقناتي القرآن والسنة من الحرمين.</p>
+          <span class="feature-tag">بث مباشر نقي</span>
+        </div>
+
+        <!-- 4 -->
+        <div class="glass feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          </div>
+          <h3 class="feature-title">مواقيت الصلاة وبوصلة القبلة</h3>
+          <p class="feature-desc">حساب دقيق للمواقيت حول العالم بدعم GPS وأكثر من 20 طريقة حسابية معتمدة. بالإضافة إلى بوصلة القبلة التفاعلية الحساسة للاتجاه واستكشاف المساجد.</p>
+          <span class="feature-tag">دقة متناهية</span>
+        </div>
+
+        <!-- 5 -->
+        <div class="glass feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><path d="M20 4C11 4 5 7.5 5 14a5 5 0 0 0 5 5c6.5 0 10-6 10-15z"/></svg>
+          </div>
+          <h3 class="feature-title">مكتبة الرقائق وأقوال السلف</h3>
+          <p class="feature-desc">58 أثراً موثقاً من عيون كلام السلف (الحسن البصري، الفضيل، سفيان الثوري) في الزهد والمحاسبة والنية، مع العزو الدقيق لرقم الجزء والصفحة لكل أثر.</p>
+          <span class="feature-tag">موثق بالأجزاء والصفحات</span>
+        </div>
+
+        <!-- 6 -->
+        <div class="glass feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 1 1 8 0v3"/></svg>
+          </div>
+          <h3 class="feature-title">الخصوصية والنسخ الاحتياطي</h3>
+          <p class="feature-desc">بياناتك ملكك بالكامل. قفل اختياري برمز PIN، إمكانية تصدير واسترجاع نسخة احتياطية من مهامك وأورادك بنقرة واحدة، وصفر تتبّع أو إعلانات.</p>
+          <span class="feature-tag">أمان 100%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- تجربة تفاعلية مباشرة: مسبحة إلكترونية داخل الموقع الدعائي -->
+    <section class="interactive-section glass">
+      <div class="interactive-info">
+        <span class="section-tag">جرّب بنفسك الآن</span>
+        <h3>المسبحة الإلكترونية المتطورة</h3>
+        <p style="color:var(--text-muted);line-height:1.8;margin-bottom:20px;">
+          واحدة من أمتع المزايا داخل التطبيق؛ عداد تسبيح عالي الاستجابة مع دعم اهتزازات اللمس الصوتية وأوراد السنة النبوية الصحيحة.
+        </p>
+        <div style="font-size:0.9rem;color:#5eead4;font-weight:bold;">
+          «سُبْحَانَ اللَّهِ وَبِحَمْدِهِ ، سُبْحَانَ اللَّهِ الْعَظِيمِ»
+        </div>
+      </div>
+
+      <div class="interactive-box">
+        <div style="font-size:0.85rem;color:var(--text-muted);margin-bottom:8px;">اضغط على الدائرة للتسبيح</div>
+        <button class="demo-counter-btn" id="demoCounterBtn" onclick="incrementDemoCounter()">
+          <span class="demo-count-num" id="demoCounterNum">0</span>
+          <span style="font-size:0.75rem;opacity:0.85;">تسبيحة</span>
+        </button>
+        <button class="btn btn-secondary" style="padding:6px 16px;font-size:0.8rem;" onclick="resetDemoCounter()">إعادة ضبط</button>
+      </div>
+    </section>
+
+    <!-- كارت الدعوة للتحميل والتجربة (Call To Action) -->
+    <section class="cta-banner">
+      <h2>ابدأ رحلتك مع «إِيَاد المُسلم» اليوم</h2>
+      <p>تطبيق مجاني بالكامل لوجه الله تعالى، خفيف، ولا يطلب أي صلاحيات غير ضرورية. يمكنك استخدامه كصفحة ويب فورية أو تثبيته على هاتفك.</p>
+      <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+        <a href="./eyad-almuslim-calm-heritage.html" class="btn btn-primary" target="_blank" style="padding:14px 30px;font-size:1.05rem;">
+          <span>تشغيل التطبيق الآن مجاناً</span>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <!-- التذييل -->
+  <footer>
+    <div class="container">
+      <div class="footer-links">
+        <a href="./eyad-almuslim-calm-heritage.html">فتح التطبيق</a>
+        <a href="https://github.com" target="_blank">مستودع GitHub</a>
+      </div>
+      <p>تطبيق «إِيَاد المُسلم» — وقف خيري، لوجه الله تعالى 🤍</p>
+    </div>
+  </footer>
+
+  <script>
+    // عداد التسبيح التجريبي داخل صفحة الهبوط
+    let demoCount = 0;
+    const countDisplay = document.getElementById('demoCounterNum');
+    
+    function incrementDemoCounter() {
+      demoCount++;
+      countDisplay.innerText = demoCount;
+      if (window.navigator && window.navigator.vibrate) {
+        window.navigator.vibrate(25);
+      }
+    }
+
+    function resetDemoCounter() {
+      demoCount = 0;
+      countDisplay.innerText = 0;
+    }
+  </script>
+</body>
+</html>
